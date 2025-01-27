@@ -7,21 +7,18 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_data")
-public class User_Data {
+@Table(name = "steps")
+public class Steps {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "name")
-    private String name;
+    @Column(name = "step_number", nullable = false)
+    private int number_step;
 
-    @Column(nullable = false, unique = true)
-    private String phone;
-
-    @Column(nullable = true)
-    private int age;
+    @Column(nullable = false)
+    private String description;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -37,28 +34,20 @@ public class User_Data {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public int getNumber_step() {
+        return number_step;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNumber_step(int number_step) {
+        this.number_step = number_step;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int edad) {
-        this.age = age;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getCreatedAt() {
