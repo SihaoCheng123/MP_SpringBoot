@@ -26,6 +26,10 @@ public class Users {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_data_id", referencedColumnName = "id")
+    private User_Data user_data;
+
     public Long getId() {
         return id;
     }

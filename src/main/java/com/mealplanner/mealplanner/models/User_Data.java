@@ -23,6 +23,9 @@ public class User_Data {
     @Column(nullable = true)
     private int age;
 
+    @OneToOne(mappedBy = "user_data")
+    private Users users;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
