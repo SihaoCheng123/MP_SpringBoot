@@ -35,5 +35,3 @@ build/
 .mvn
 
 .gitattributes
-
-!src/main/java/com/mealplanner/mealplanner/repositories
