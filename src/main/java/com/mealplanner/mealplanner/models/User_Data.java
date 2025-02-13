@@ -17,7 +17,7 @@ public class User_Data {
     @Column(nullable = false, name = "name")
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private String phone;
 
     @Column(nullable = true)

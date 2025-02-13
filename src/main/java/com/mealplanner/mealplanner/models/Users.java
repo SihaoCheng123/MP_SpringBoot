@@ -70,4 +70,11 @@ public class Users {
         this.updatedAt = updatedAt;
     }
 
+    public User_Data getUser_data() {
+        return user_data;
+    }
+
+    public void setUser_data(User_Data user_data) {
+        this.user_data = user_data;
+    }
 }
