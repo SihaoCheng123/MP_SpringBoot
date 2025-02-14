@@ -15,10 +15,16 @@ public class Ingredients {
     private Long id;
 
     @Column(name = "ingredients_name", nullable = false)
-    private String name_ingredient;
+    private String name;
+
+    @Column(nullable = true)
+    private Double price;
 
     @Column(nullable = false)
-    private Double price;
+    private String category;
+
+    @Column(nullable = true)
+    private String image;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -51,11 +57,11 @@ public class Ingredients {
     }
 
     public String getName_ingredient() {
-        return name_ingredient;
+        return name;
     }
 
-    public void setName_ingredient(String name_ingredient) {
-        this.name_ingredient = name_ingredient;
+    public void setName_ingredient(String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -64,5 +70,21 @@ public class Ingredients {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

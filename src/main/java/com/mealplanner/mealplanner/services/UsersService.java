@@ -4,6 +4,7 @@ import com.mealplanner.mealplanner.models.User_Data;
 import com.mealplanner.mealplanner.models.Users;
 import com.mealplanner.mealplanner.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public class UsersService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Users> getAllUsers(){return this.userRepository.findAll();}
 
@@ -28,7 +31,7 @@ public class UsersService {
 
         Users newUser = new Users();
         newUser.setEmail(user.getEmail());
-        newUser.setPassword(user.getPassword());
+        newUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
         User_Data newUserData = new User_Data();
         newUserData.setName(user.getUser_data().getName());
         newUserData.setPhone(user.getUser_data().getPhone());
