@@ -42,6 +42,13 @@ public class UsersService {
         Users userOptional = this.userRepository.findById(id).orElseThrow(()->
                 new RuntimeException("User not fount"));
 
+        userOptional.setEmail(user.getEmail());
+        User_Data newUserData = new User_Data();
+        newUserData.setName(user.getUser_data().getName());
+        newUserData.setAge(user.getUser_data().getAge());
+        newUserData.setPhone(user.getUser_data().getPhone());
+        userOptional.setUser_data(newUserData);
+
         if (user.getPassword() != null && user.getPassword().isEmpty()){
             userOptional.setPassword(user.getPassword());
         }
