@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "recipes")
@@ -28,6 +29,21 @@ public class Recipes {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @ManyToMany(mappedBy = "recipes_list")
+    private Set<Users> users_recipes;
+
+    @ManyToMany(mappedBy = "recipes_fav")
+    private Set<Users> users_recipes_fav;
+
+    @ManyToMany
+    @JoinTable(name = "ingredients_list",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    private Set<Ingredients> ingredients;
+
+    @OneToMany(mappedBy = "recipes")
+    private Set<Steps> steps;
 
     public Long getId() {
         return id;
@@ -75,5 +91,37 @@ public class Recipes {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Set<Users> getUsers_recipes() {
+        return users_recipes;
+    }
+
+    public void setUsers_recipes(Set<Users> users_recipes) {
+        this.users_recipes = users_recipes;
+    }
+
+    public Set<Users> getUsers_recipes_fav() {
+        return users_recipes_fav;
+    }
+
+    public void setUsers_recipes_fav(Set<Users> users_recipes_fav) {
+        this.users_recipes_fav = users_recipes_fav;
+    }
+
+    public Set<Ingredients> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredients> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public Set<Steps> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(Set<Steps> steps) {
+        this.steps = steps;
     }
 }

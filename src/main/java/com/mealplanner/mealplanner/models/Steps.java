@@ -26,6 +26,10 @@ public class Steps {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipes recipes;
+
     public Long getId() {
         return id;
     }
@@ -64,5 +68,13 @@ public class Steps {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Recipes getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(Recipes recipes) {
+        this.recipes = recipes;
     }
 }

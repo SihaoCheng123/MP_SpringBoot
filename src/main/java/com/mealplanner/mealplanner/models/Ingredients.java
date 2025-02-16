@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "ingredients")
@@ -31,6 +32,9 @@ public class Ingredients {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @ManyToMany(mappedBy = "ingredients")
+    private Set<Recipes> recipes ;
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
@@ -86,5 +90,21 @@ public class Ingredients {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<Recipes> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(Set<Recipes> recipes) {
+        this.recipes = recipes;
     }
 }
