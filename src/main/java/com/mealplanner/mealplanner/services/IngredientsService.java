@@ -18,20 +18,20 @@ public class IngredientsService {
         return this.ingredientRepository.findAll();
     }
 
-    public Optional<Ingredients> getIngredientByName(String ingredients_name){
-        return this.ingredientRepository.findIngredientByName(ingredients_name);
+    public Optional<Ingredients> getIngredientByName(String name){
+        return this.ingredientRepository.findIngredientByName(name);
     }
 
     public Ingredients createIngredient(Ingredients ingredients){
-        if (this.ingredientRepository.findIngredientByName(ingredients.getName_ingredient()).isPresent()){
+        if (this.ingredientRepository.findIngredientByName(ingredients.getName()).isPresent()){
             throw new RuntimeException("Ingredient exists already");
         }
 
         Ingredients newIng = new Ingredients();
-        newIng.setName_ingredient(ingredients.getName_ingredient());
+        newIng.setName(ingredients.getName());
         newIng.setPrice(ingredients.getPrice());
         newIng.setCategory(ingredients.getCategory());
-        newIng.setCategory(ingredients.getImage());
+        newIng.setImage(ingredients.getImage());
 
         return this.ingredientRepository.save(newIng);
     }
@@ -40,7 +40,7 @@ public class IngredientsService {
         Ingredients ingredientsOptional = this.ingredientRepository.findById(ingredients.getId()).orElseThrow(() ->
                 new RuntimeException("Ingredient not found"));
 
-        ingredientsOptional.setName_ingredient(ingredients.getName_ingredient());
+        ingredientsOptional.setName(ingredients.getName());
         ingredientsOptional.setPrice(ingredients.getPrice());
         ingredientsOptional.setCategory(ingredients.getCategory());
         ingredientsOptional.setImage(ingredients.getImage());
@@ -48,9 +48,9 @@ public class IngredientsService {
         return this.ingredientRepository.save(ingredientsOptional);
     }
 
-    public void deleteIngredientByName(Long id){
-        Ingredients ingOptional = this.ingredientRepository.findById(id).orElseThrow(()->
-                new RuntimeException("No ingredient found with id: " + id));
+    public void deleteIngredientByName(String name){
+        Ingredients ingOptional = this.ingredientRepository.findIngredientByName(name).orElseThrow(()->
+                new RuntimeException("No ingredient found with name: " + name));
         this.ingredientRepository.delete(ingOptional);
     }
 }

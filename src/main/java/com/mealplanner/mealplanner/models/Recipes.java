@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -36,11 +37,11 @@ public class Recipes {
     @ManyToMany(mappedBy = "recipes_fav")
     private Set<Users> users_recipes_fav;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "ingredients_list",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
-    private Set<Ingredients> ingredients;
+            joinColumns = @JoinColumn(name = "recipe_id", nullable = true),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id", nullable = true))
+    private Set<Ingredients> ingredients = new HashSet<>();
 
     @OneToMany(mappedBy = "recipes")
     private Set<Steps> steps;

@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,8 +34,8 @@ public class Ingredients {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "ingredients")
-    private Set<Recipes> recipes ;
+    @ManyToMany(mappedBy = "ingredients", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Recipes> recipes = new HashSet<>();
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
@@ -58,14 +59,6 @@ public class Ingredients {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public String getName_ingredient() {
-        return name;
-    }
-
-    public void setName_ingredient(String name) {
-        this.name = name;
     }
 
     public Long getId() {
