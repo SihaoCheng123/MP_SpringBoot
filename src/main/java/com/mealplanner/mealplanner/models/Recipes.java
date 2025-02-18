@@ -1,5 +1,6 @@
 package com.mealplanner.mealplanner.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,7 +24,7 @@ public class Recipes {
     private String time;
 
     @Column
-    private String rations;
+    private int rations;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -43,7 +44,8 @@ public class Recipes {
             inverseJoinColumns = @JoinColumn(name = "ingredient_id", nullable = true))
     private Set<Ingredients> ingredients = new HashSet<>();
 
-    @OneToMany(mappedBy = "recipes")
+    @OneToMany(mappedBy = "recipes", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Steps> steps;
 
     public Long getId() {
@@ -70,11 +72,11 @@ public class Recipes {
         this.time = time;
     }
 
-    public String getRations() {
+    public int getRations() {
         return rations;
     }
 
-    public void setRations(String rations) {
+    public void setRations(int rations) {
         this.rations = rations;
     }
 
