@@ -1,5 +1,8 @@
 package com.mealplanner.mealplanner.controllers;
 
+import com.mealplanner.mealplanner.dto.ApiDelivery;
+import com.mealplanner.mealplanner.dto.LoginRequest;
+import com.mealplanner.mealplanner.dto.LoginResponse;
 import com.mealplanner.mealplanner.models.User_Data;
 import com.mealplanner.mealplanner.models.Users;
 import com.mealplanner.mealplanner.services.UsersService;
@@ -9,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -45,5 +49,11 @@ public class UsersController {
     @DeleteMapping("/delete/{id}")
     public void deleteUserById(@PathVariable Long id){
         this.usersService.deleteUserById(id);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody LoginRequest credentials){
+        ApiDelivery<LoginResponse> response = this.usersService.login(credentials.getEmail(), credentials.getPassword());
+        return ResponseEntity.status(response.getStatus()).body(response);
     }
 }
