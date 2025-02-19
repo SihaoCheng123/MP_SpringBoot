@@ -3,6 +3,8 @@ package com.mealplanner.mealplanner.services;
 import com.mealplanner.mealplanner.models.Recipes;
 import com.mealplanner.mealplanner.models.Steps;
 import com.mealplanner.mealplanner.repositories.RecipeRepository;
+import com.mealplanner.mealplanner.repositories.StepRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class RecipesService {
 
     @Autowired
     private RecipeRepository recipeRepository;
+
+    @Autowired
+    private StepRepository stepRepository;
 
     public List<Recipes> getAllRecipes(){
         return this.recipeRepository.findAll();
@@ -52,6 +57,7 @@ public class RecipesService {
        return this.recipeRepository.save(newRecipe);
     }
 
+    @Transactional
     public Recipes updateRecipe(Recipes recipes){
         Recipes recipesOptional = this.recipeRepository.findById(recipes.getId()).orElseThrow(() ->
                 new RuntimeException("Recipe not found"));
@@ -67,12 +73,15 @@ public class RecipesService {
 
         if (recipes.getSteps() != null){
             for (Steps step: recipes.getSteps()) {
-                Steps newStep = new Steps();
-                newStep.setRecipes(recipesOptional);
-                newStep.setNumber_step(step.getNumber_step());
-                newStep.setDescription(step.getDescription());
-                newStep.setRecipes(recipesOptional);
-                stepsList.add(newStep);
+                Optional<Steps> existingStepOpt = this.stepRepository.findById(step.getId());
+                if (existingStepOpt.isPresent()){
+                    Steps existingStep = existingStepOpt.get();
+                    existingStep.setDescription(step.getDescription());
+                    this.stepRepository.save(existingStep);
+                }else{
+                    step.setRecipes(recipesOptional);
+                    this.stepRepository.save(step);
+                }
             }
             recipesOptional.setSteps(stepsList);
         }
