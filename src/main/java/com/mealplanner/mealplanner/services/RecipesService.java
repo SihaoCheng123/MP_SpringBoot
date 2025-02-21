@@ -40,6 +40,7 @@ public class RecipesService {
         newRecipe.setRations(recipes.getRations());
         newRecipe.setTime(recipes.getTime());
         newRecipe.setDate(recipes.getDate());
+        newRecipe.setCategory(recipes.getCategory());
         newRecipe.setImage(recipes.getImage());
 
         if (recipes.getSteps().isEmpty()){
@@ -68,6 +69,7 @@ public class RecipesService {
         recipesOptional.setRations(recipes.getRations());
         recipesOptional.setTime(recipes.getTime());
         recipesOptional.setDate(recipes.getDate());
+        recipesOptional.setCategory(recipes.getCategory());
         recipesOptional.setImage(recipes.getImage());
         if (recipes.getSteps().isEmpty()){
             throw new RuntimeException("No steps found");

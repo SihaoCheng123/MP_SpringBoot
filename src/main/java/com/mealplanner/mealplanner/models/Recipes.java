@@ -30,6 +30,9 @@ public class Recipes {
     @Column
     private Date date;
 
+    @Column
+    private String category;
+
     @Column(nullable = true)
     private String Image;
 
@@ -149,5 +152,13 @@ public class Recipes {
 
     public void setSteps(Set<Steps> steps) {
         this.steps = steps;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
