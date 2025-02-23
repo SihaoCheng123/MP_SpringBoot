@@ -8,10 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RecipesService {
@@ -28,6 +25,10 @@ public class RecipesService {
 
     public Optional<Recipes> getRecipeByName(String name){
         return this.recipeRepository.findRecipeByName(name);
+    }
+
+    public Optional<List<Recipes>> getRecipeByDate(Date date){
+        return this.recipeRepository.findRecipeByDate(date);
     }
 
     public Recipes createRecipe(Recipes recipes){
