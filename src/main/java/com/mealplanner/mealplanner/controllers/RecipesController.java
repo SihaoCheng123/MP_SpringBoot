@@ -54,10 +54,16 @@ public class RecipesController {
         return ResponseEntity.ok(recipesList);
     }
 
-    @GetMapping("/get/{name}")
+    @GetMapping("/get-by-name/{name}")
     public ResponseEntity<Optional<Recipes>> getRecipeByName(@PathVariable String name){
         Optional<Recipes> optionalRecipe = this.recipesService.getRecipeByName(name);
         return ResponseEntity.ok(optionalRecipe);
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Optional<Recipes>> getRecipeById(@PathVariable Long id){
+        Optional<Recipes> optRecipe = this.recipesService.getRecipeById(id);
+        return ResponseEntity.ok(optRecipe);
     }
 
     @GetMapping("/get-by-date/{date}")

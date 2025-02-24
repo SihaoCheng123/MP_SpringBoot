@@ -1,7 +1,9 @@
 package com.mealplanner.mealplanner.services;
 
+import com.mealplanner.mealplanner.models.Ingredients;
 import com.mealplanner.mealplanner.models.Recipes;
 import com.mealplanner.mealplanner.models.Steps;
+import com.mealplanner.mealplanner.repositories.IngredientRepository;
 import com.mealplanner.mealplanner.repositories.RecipeRepository;
 import com.mealplanner.mealplanner.repositories.StepRepository;
 import jakarta.transaction.Transactional;
@@ -19,6 +21,9 @@ public class RecipesService {
     @Autowired
     private StepRepository stepRepository;
 
+    @Autowired
+    private IngredientRepository ingredientRepository;
+
     public List<Recipes> getAllRecipes(){
         return this.recipeRepository.findAll();
     }
@@ -27,9 +32,14 @@ public class RecipesService {
         return this.recipeRepository.findRecipeByName(name);
     }
 
+    public Optional<Recipes> getRecipeById(Long id){
+        return this.recipeRepository.findById(id);
+    }
+
     public Optional<List<Recipes>> getRecipeByDate(Date date){
         return this.recipeRepository.findRecipeByDate(date);
     }
+
 
     public Recipes createRecipe(Recipes recipes){
         if(this.recipeRepository.findRecipeByName(recipes.getName()).isPresent()){
@@ -56,8 +66,23 @@ public class RecipesService {
             stepsList.add(newStep);
             System.out.println(step.getDescription());
         }
-
         newRecipe.setSteps(stepsList);
+
+        Set<Ingredients> ingredientsList = new HashSet<>();
+        for (Ingredients ingredients : recipes.getIngredients()){
+            Optional<Ingredients> existingIngredientOpt = this.ingredientRepository.findIngredientByName(ingredients.getName());
+            Ingredients existingIngredient;
+            if (existingIngredientOpt.isPresent()){
+                existingIngredient = existingIngredientOpt.get();
+            }else {
+                existingIngredient = new Ingredients();
+                existingIngredient.setName(ingredients.getName());
+                this.ingredientRepository.save(existingIngredient);
+            }
+            ingredientsList.add(existingIngredient);
+        }
+        newRecipe.setIngredients(ingredientsList);
+
        return this.recipeRepository.save(newRecipe);
     }
 
@@ -92,8 +117,22 @@ public class RecipesService {
             recipesOptional.setSteps(stepsList);
         }
 
-
-
+        Set<Ingredients> ingredientsList = new HashSet<>();
+        if (recipes.getIngredients() != null){
+            for (Ingredients ingredient : recipes.getIngredients()){
+                Optional<Ingredients> existingIngOpt = this.ingredientRepository.findIngredientByName(ingredient.getName());
+                Ingredients newIng;
+                if (existingIngOpt.isPresent()){
+                    newIng = existingIngOpt.get();
+                }else {
+                    newIng = new Ingredients();
+                    newIng.setName(ingredient.getName());
+                    this.ingredientRepository.save(newIng);
+                }
+                ingredientsList.add(newIng);
+            }
+            recipesOptional.setIngredients(ingredientsList);
+        }
         return this.recipeRepository.save(recipesOptional);
     }
 

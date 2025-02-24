@@ -1,5 +1,6 @@
 package com.mealplanner.mealplanner.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,7 +23,7 @@ public class Ingredients {
     @Column(nullable = true)
     private Double price;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String category;
 
     @Column(nullable = true)
@@ -34,8 +35,9 @@ public class Ingredients {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "ingredients", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Recipes> recipes = new HashSet<>();
+//    @ManyToMany(mappedBy = "ingredients", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JsonBackReference
+//    private Set<Recipes> recipes = new HashSet<>();
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
@@ -93,11 +95,11 @@ public class Ingredients {
         this.name = name;
     }
 
-    public Set<Recipes> getRecipes() {
-        return recipes;
-    }
-
-    public void setRecipes(Set<Recipes> recipes) {
-        this.recipes = recipes;
-    }
+//    public Set<Recipes> getRecipes() {
+//        return recipes;
+//    }
+//
+//    public void setRecipes(Set<Recipes> recipes) {
+//        this.recipes = recipes;
+//    }
 }

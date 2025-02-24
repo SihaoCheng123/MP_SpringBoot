@@ -50,8 +50,8 @@ public class Recipes {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "ingredients_list",
-            joinColumns = @JoinColumn(name = "recipe_id", nullable = true),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id", nullable = true))
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private Set<Ingredients> ingredients = new HashSet<>();
 
     @OneToMany(mappedBy = "recipes", cascade = CascadeType.ALL)
