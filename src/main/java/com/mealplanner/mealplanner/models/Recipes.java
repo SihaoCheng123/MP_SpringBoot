@@ -1,5 +1,6 @@
 package com.mealplanner.mealplanner.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -43,9 +44,11 @@ public class Recipes {
     private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "recipes_list", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Users> users_recipes;
 
     @ManyToMany(mappedBy = "recipes_fav", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Users> users_recipes_fav;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

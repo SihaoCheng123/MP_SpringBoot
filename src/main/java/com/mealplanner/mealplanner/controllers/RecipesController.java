@@ -75,6 +75,13 @@ public class RecipesController {
         return ResponseEntity.ok(optRecipe);
     }
 
+    @GetMapping("/get-by-date-and-user/{date}/{user_id}")
+    public ResponseEntity<Optional<List<Recipes>>> getRecipeByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @PathVariable Long user_id){
+        Optional<List<Recipes>> optRecipe = this.recipesService.getRecipeByDateAndUserId(date, user_id);
+        return ResponseEntity.ok(optRecipe);
+    }
+
+
     @DeleteMapping("/delete/{name}")
     public void deleteRecipeByName(@PathVariable String name){
         this.recipesService.deleteRecipeByName(name);

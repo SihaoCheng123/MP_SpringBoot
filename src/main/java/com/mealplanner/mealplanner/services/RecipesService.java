@@ -45,6 +45,9 @@ public class RecipesService {
         return this.recipeRepository.findRecipeByDate(date);
     }
 
+    public Optional<List<Recipes>> getRecipeByDateAndUserId(Date date, Long user_id){
+        return this.recipeRepository.findRecipeByDateAndUserId(date, user_id);
+    }
 
     public Recipes createRecipe(Recipes recipes, Long userId){
         if(this.recipeRepository.findRecipeByName(recipes.getName()).isPresent()){
