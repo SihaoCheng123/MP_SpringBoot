@@ -1,6 +1,7 @@
 package com.mealplanner.mealplanner.controllers;
 
 import com.mealplanner.mealplanner.models.Recipes;
+import com.mealplanner.mealplanner.models.Users;
 import com.mealplanner.mealplanner.services.RecipesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,8 +20,8 @@ public class RecipesController {
     @Autowired
     private RecipesService recipesService;
 
-    @PostMapping("/create")
-    public ResponseEntity<Recipes> createRecipe(@RequestBody Recipes recipes){
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<Recipes> createRecipe(@RequestBody Recipes recipes, @PathVariable Long userId){
         Date date = recipes.getDate();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -31,7 +32,9 @@ public class RecipesController {
 
         recipes.setDate(calendar.getTime());
 
-        Recipes createRecipe = this.recipesService.createRecipe(recipes);
+        System.out.println(recipes.toString());
+        System.out.println(userId);
+        Recipes createRecipe = this.recipesService.createRecipe(recipes, userId);
         return ResponseEntity.ok(createRecipe);
     }
 

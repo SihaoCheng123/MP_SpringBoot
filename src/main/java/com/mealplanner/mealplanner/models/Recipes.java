@@ -42,10 +42,10 @@ public class Recipes {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "recipes_list")
+    @ManyToMany(mappedBy = "recipes_list", cascade = CascadeType.ALL)
     private Set<Users> users_recipes;
 
-    @ManyToMany(mappedBy = "recipes_fav")
+    @ManyToMany(mappedBy = "recipes_fav", cascade = CascadeType.ALL)
     private Set<Users> users_recipes_fav;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

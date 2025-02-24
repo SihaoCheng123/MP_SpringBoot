@@ -3,9 +3,11 @@ package com.mealplanner.mealplanner.services;
 import com.mealplanner.mealplanner.models.Ingredients;
 import com.mealplanner.mealplanner.models.Recipes;
 import com.mealplanner.mealplanner.models.Steps;
+import com.mealplanner.mealplanner.models.Users;
 import com.mealplanner.mealplanner.repositories.IngredientRepository;
 import com.mealplanner.mealplanner.repositories.RecipeRepository;
 import com.mealplanner.mealplanner.repositories.StepRepository;
+import com.mealplanner.mealplanner.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class RecipesService {
     @Autowired
     private IngredientRepository ingredientRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public List<Recipes> getAllRecipes(){
         return this.recipeRepository.findAll();
     }
@@ -41,18 +46,34 @@ public class RecipesService {
     }
 
 
-    public Recipes createRecipe(Recipes recipes){
+    public Recipes createRecipe(Recipes recipes, Long userId){
         if(this.recipeRepository.findRecipeByName(recipes.getName()).isPresent()){
             throw new RuntimeException("Recipe already exists");
         }
 
         Recipes newRecipe = new Recipes();
+
         newRecipe.setName(recipes.getName());
         newRecipe.setRations(recipes.getRations());
         newRecipe.setTime(recipes.getTime());
         newRecipe.setDate(recipes.getDate());
         newRecipe.setCategory(recipes.getCategory());
         newRecipe.setImage(recipes.getImage());
+
+        Optional<Users> userOpt = this.userRepository.findById(userId);
+        if(!userOpt.isPresent()){
+            throw new RuntimeException("User not found");
+        }
+
+        Users users = userOpt.get();
+        Set<Recipes> users_Recipe = users.getRecipes_list();
+        if (users_Recipe == null){
+            users_Recipe = new HashSet<>();
+        }
+
+        users_Recipe.add(newRecipe);
+        users.setRecipes_list(users_Recipe);
+
 
         if (recipes.getSteps().isEmpty()){
             throw new RuntimeException("No steps found");
