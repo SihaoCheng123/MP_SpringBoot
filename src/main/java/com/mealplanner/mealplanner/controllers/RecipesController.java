@@ -50,6 +50,12 @@ public class RecipesController {
         return ResponseEntity.ok(updateRecipe);
     }
 
+    @PostMapping("/fav-recipes/{recipe_id}/{user_id}")
+    public ResponseEntity<Recipes> createFavRecipe(@PathVariable Long recipe_id, @PathVariable Long user_id){
+        Recipes favRecipe = this.recipesService.saveFavRecipe(user_id, recipe_id);
+        return ResponseEntity.ok(favRecipe);
+    }
+
     @GetMapping("/get-recipes")
     public ResponseEntity<List<Recipes>> getAllRecipes(){
         List<Recipes> recipesList = this.recipesService.getAllRecipes();
@@ -83,6 +89,11 @@ public class RecipesController {
     @GetMapping("weekly-ingredients/{date}")
     public List<Ingredients> getIngredientsFromThisWeek(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
         return this.recipesService.getIngredientsFromThisWeek(date);
+    }
+
+    @GetMapping("weekly-ingredients-user/{date}/{user_id}")
+    public List<Ingredients> getIngredientsFromThisWeekAndUserId(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @PathVariable Long user_id){
+        return this.recipesService.getIngredientsFromThisWeekAndUserId(date,user_id);
     }
 
 

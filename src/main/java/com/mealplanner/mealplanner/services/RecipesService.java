@@ -9,11 +9,10 @@ import com.mealplanner.mealplanner.repositories.RecipeRepository;
 import com.mealplanner.mealplanner.repositories.StepRepository;
 import com.mealplanner.mealplanner.repositories.UserRepository;
 import jakarta.transaction.Transactional;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -66,7 +65,7 @@ public class RecipesService {
         newRecipe.setImage(recipes.getImage());
 
         Optional<Users> userOpt = this.userRepository.findById(userId);
-        if(!userOpt.isPresent()){
+        if(userOpt.isEmpty()){
             throw new RuntimeException("User not found");
         }
 
@@ -110,6 +109,26 @@ public class RecipesService {
         newRecipe.setIngredients(ingredientsList);
 
        return this.recipeRepository.save(newRecipe);
+    }
+
+    public Recipes saveFavRecipe(Long user_id, Long recipe_id){
+        Optional<Users> userOpt = this.userRepository.findById(user_id);
+        Optional<Recipes> recipesOpt = this.recipeRepository.findById(recipe_id);
+        Users user = new Users();
+        Recipes recipe = new Recipes();
+        if (userOpt.isPresent() && recipesOpt.isPresent()){
+            user = userOpt.get();
+            recipe = recipesOpt.get();
+            Set<Recipes> favouriteRecipes = user.getRecipes_fav();
+            if (favouriteRecipes == null){
+                favouriteRecipes = new HashSet<>();
+            }
+            favouriteRecipes.add(recipe);
+            user.setRecipes_fav(favouriteRecipes);
+            this.userRepository.save(user);
+        }
+
+        return this.recipeRepository.save(recipe);
     }
 
     @Transactional
@@ -182,6 +201,31 @@ public class RecipesService {
         for (Recipes recipes: recipeListWeek){
             ingredientsListWeek.addAll(recipes.getIngredients());
         }
+        return ingredientsListWeek;
+
+    }
+
+    public List<Ingredients> getIngredientsFromThisWeekAndUserId(Date today, Long user_id){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        Date startOfWeek = calendar.getTime();
+        calendar.add(Calendar.DATE, 6);
+        Date endOfWeek = calendar.getTime();
+
+        List<Recipes> recipeListWeek = this.recipeRepository.findRecipesBetweenDates(startOfWeek, endOfWeek);
+
+        List<Ingredients> ingredientsListWeek = new ArrayList<>();
+        Optional<Users> userOpt = this.userRepository.findById(user_id);
+        if (userOpt.isPresent()){
+            Users existingUser = userOpt.get();
+            for (Recipes recipes: recipeListWeek){
+                if (existingUser.getId().equals(user_id)){
+                    ingredientsListWeek.addAll(recipes.getIngredients());
+                }
+            }
+        }
+
         return ingredientsListWeek;
 
     }
