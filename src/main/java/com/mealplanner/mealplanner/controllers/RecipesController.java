@@ -1,5 +1,6 @@
 package com.mealplanner.mealplanner.controllers;
 
+import com.mealplanner.mealplanner.models.Ingredients;
 import com.mealplanner.mealplanner.models.Recipes;
 import com.mealplanner.mealplanner.models.Users;
 import com.mealplanner.mealplanner.services.RecipesService;
@@ -8,10 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController
 @RequestMapping("/recipes")
@@ -79,6 +78,11 @@ public class RecipesController {
     public ResponseEntity<Optional<List<Recipes>>> getRecipeByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @PathVariable Long user_id){
         Optional<List<Recipes>> optRecipe = this.recipesService.getRecipeByDateAndUserId(date, user_id);
         return ResponseEntity.ok(optRecipe);
+    }
+
+    @GetMapping("weekly-ingredients/{date}")
+    public List<Ingredients> getIngredientsFromThisWeek(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
+        return this.recipesService.getIngredientsFromThisWeek(date);
     }
 
 

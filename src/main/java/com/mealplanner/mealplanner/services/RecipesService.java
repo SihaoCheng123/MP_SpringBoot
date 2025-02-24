@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -164,5 +166,23 @@ public class RecipesService {
         Recipes recipeOptional = this.recipeRepository.findRecipeByName(name).orElseThrow(() ->
                 new RuntimeException("No recipe found with name: " + name));
         this.recipeRepository.delete(recipeOptional);
+    }
+
+    public List<Ingredients> getIngredientsFromThisWeek(Date today){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        Date startOfWeek = calendar.getTime();
+        calendar.add(Calendar.DATE, 6);
+        Date endOfWeek = calendar.getTime();
+
+        List<Recipes> recipeListWeek = this.recipeRepository.findRecipesBetweenDates(startOfWeek, endOfWeek);
+
+        List<Ingredients> ingredientsListWeek = new ArrayList<>();
+        for (Recipes recipes: recipeListWeek){
+            ingredientsListWeek.addAll(recipes.getIngredients());
+        }
+        return ingredientsListWeek;
+
     }
 }
