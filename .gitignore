@@ -36,4 +36,3 @@ build/
 
 .gitattributes
 
-/src/main/resources/secrets.properties
