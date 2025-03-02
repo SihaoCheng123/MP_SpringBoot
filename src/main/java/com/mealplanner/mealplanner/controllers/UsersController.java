@@ -46,6 +46,12 @@ public class UsersController {
         return ResponseEntity.ok(optionalUser);
     }
 
+    @GetMapping("get-user-id/{id}")
+    public ResponseEntity<Optional<Users>> getUserById(@PathVariable Long id){
+        Optional<Users> userOpt = this.usersService.getUserById(id);
+        return ResponseEntity.ok(userOpt);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteUserById(@PathVariable Long id){
         this.usersService.deleteUserById(id);

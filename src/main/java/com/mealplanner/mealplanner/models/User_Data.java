@@ -21,7 +21,7 @@ public class User_Data {
     private String phone;
 
     @Column(nullable = true)
-    private int age;
+    private Integer age;
 
     @OneToOne(mappedBy = "user_data")
     private Users users;
@@ -56,11 +56,11 @@ public class User_Data {
         this.phone = phone;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int edad) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
