@@ -229,4 +229,12 @@ public class RecipesService {
         return ingredientsListWeek;
 
     }
+
+    public List<Recipes> getFavRecipesByUserId(Long user_id){
+        return this.recipeRepository.findFavRecipesByUserId(user_id);
+    }
+
+    public List<Recipes> getAllRecipesByUserId(Long user_id){
+        return this.recipeRepository.findAllRecipesByUserId(user_id);
+    }
 }

@@ -31,6 +31,10 @@ public class UsersService {
         return this.userRepository.findUserByEmail(email);
     }
 
+    public Optional<Users> getUserById(Long id){
+        return this.userRepository.findById(id);
+    }
+
     public Users createUser(Users user){
         if (this.userRepository.findUserByEmail(user.getEmail()).isPresent()){
             throw new RuntimeException("User exists already");
@@ -46,6 +50,10 @@ public class UsersService {
         newUserData.setName(user.getUser_data().getName());
         newUserData.setPhone(user.getUser_data().getPhone());
         newUserData.setAge(user.getUser_data().getAge());
+        System.out.println(user.getUser_data().getName());
+        System.out.println(user.getUser_data().getAge());
+        System.out.println(user.getUser_data().getPhone());
+
 
         newUser.setUser_data(newUserData);
         return this.userRepository.save(newUser);

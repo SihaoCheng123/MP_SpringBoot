@@ -24,4 +24,10 @@ public interface RecipeRepository extends JpaRepository<Recipes, Long> {
 
     @Query("SELECT r FROM Recipes r JOIN r.users_recipes u WHERE r.date BETWEEN :startDate AND :endDate AND u.id = :userId")
     List<Recipes> findRecipesBetweenDatesAndUserId(@Param("startDate") Date startDate,@Param("endDate") Date endDate, @Param("userId") Long user_id);
+
+    @Query("SELECT u.recipes_fav FROM Users u WHERE u.id = :userId")
+    List<Recipes> findFavRecipesByUserId(@Param("userId") Long user_id);
+
+    @Query("SELECT u.recipes_list FROM Users u WHERE u.id = :userId")
+    List<Recipes> findAllRecipesByUserId(@Param("userId") Long user_id);
 }

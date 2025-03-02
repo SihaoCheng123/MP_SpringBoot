@@ -87,15 +87,28 @@ public class RecipesController {
     }
 
     @GetMapping("weekly-ingredients/{date}")
-    public List<Ingredients> getIngredientsFromThisWeek(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
-        return this.recipesService.getIngredientsFromThisWeek(date);
+    public ResponseEntity<List<Ingredients>> getIngredientsFromThisWeek(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
+        List<Ingredients> ingredientsList = this.recipesService.getIngredientsFromThisWeek(date);
+        return ResponseEntity.ok(ingredientsList);
     }
 
     @GetMapping("weekly-ingredients-user/{date}/{user_id}")
-    public List<Ingredients> getIngredientsFromThisWeekAndUserId(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @PathVariable Long user_id){
-        return this.recipesService.getIngredientsFromThisWeekAndUserId(date,user_id);
+    public ResponseEntity<List<Ingredients>> getIngredientsFromThisWeekAndUserId(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @PathVariable Long user_id){
+        List<Ingredients> ingredientsList = this.recipesService.getIngredientsFromThisWeekAndUserId(date, user_id);
+        return ResponseEntity.ok(ingredientsList);
     }
 
+    @GetMapping("fav-recipes-list/{user_id}")
+    public ResponseEntity<List<Recipes>> getFavRecipesByUserId(@PathVariable Long user_id){
+        List<Recipes> recipesFav = this.recipesService.getFavRecipesByUserId(user_id);
+        return ResponseEntity.ok(recipesFav);
+    }
+
+    @GetMapping("all-recipes-list/{user_id}")
+    public ResponseEntity<List<Recipes>> getAllRecipesByUserId(@PathVariable Long user_id){
+        List<Recipes> recipesFav = this.recipesService.getAllRecipesByUserId(user_id);
+        return ResponseEntity.ok(recipesFav);
+    }
 
     @DeleteMapping("/delete/{name}")
     public void deleteRecipeByName(@PathVariable String name){
