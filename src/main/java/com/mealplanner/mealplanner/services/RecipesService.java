@@ -12,11 +12,18 @@ import jakarta.transaction.Transactional;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Service
 public class RecipesService {
+
+    private static final String UPLOAD_DIR= "uploads/";
 
     @Autowired
     private RecipeRepository recipeRepository;
@@ -50,7 +57,7 @@ public class RecipesService {
         return this.recipeRepository.findRecipeByDateAndUserId(date, user_id);
     }
 
-    public Recipes createRecipe(Recipes recipes, Long userId){
+    public Recipes createRecipe(Recipes recipes, Long userId, MultipartFile imageFile){
         if(this.recipeRepository.findRecipeByName(recipes.getName()).isPresent()){
             throw new RuntimeException("Recipe already exists");
         }
@@ -62,7 +69,22 @@ public class RecipesService {
         newRecipe.setTime(recipes.getTime());
         newRecipe.setDate(recipes.getDate());
         newRecipe.setCategory(recipes.getCategory());
-        newRecipe.setImage(recipes.getImage());
+
+        if (imageFile != null && !imageFile.isEmpty()){
+            try{
+                Files.createDirectories(Paths.get(UPLOAD_DIR));
+                String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
+                String filePath = UPLOAD_DIR + fileName;
+                imageFile.transferTo(new File(filePath));
+                newRecipe.setImage(filePath);
+
+            }catch (IOException e){
+                System.out.println("Error: " + e);
+            }
+        }else{
+            newRecipe.setImage(null);
+        }
+
 
         Optional<Users> userOpt = this.userRepository.findById(userId);
         if(userOpt.isEmpty()){

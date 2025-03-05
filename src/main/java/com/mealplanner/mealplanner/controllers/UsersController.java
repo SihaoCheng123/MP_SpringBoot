@@ -28,9 +28,9 @@ public class UsersController {
         return ResponseEntity.ok(createUser);
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<Users> updateUser(@RequestBody Users users){
-        Users updateUser = this.usersService.updateUser(users, users.getId());
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<Users> updateUser(@RequestBody Users users, @PathVariable Long id){
+        Users updateUser = this.usersService.updateUser(users, id);
         return ResponseEntity.ok(updateUser);
     }
 
