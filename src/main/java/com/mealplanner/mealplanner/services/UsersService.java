@@ -2,6 +2,7 @@ package com.mealplanner.mealplanner.services;
 
 import com.mealplanner.mealplanner.dto.ApiDelivery;
 import com.mealplanner.mealplanner.dto.LoginResponse;
+import com.mealplanner.mealplanner.dto.PasswordChangeRquest;
 import com.mealplanner.mealplanner.models.User_Data;
 import com.mealplanner.mealplanner.models.Users;
 import com.mealplanner.mealplanner.repositories.UserRepository;
@@ -85,10 +86,29 @@ public class UsersService {
             userOptional.setUser_data(newUserData);
         }
 
-        if (user.getPassword() != null && user.getPassword().isEmpty()){
+        if (user.getPassword() != null && !user.getPassword().isEmpty()){
             userOptional.setPassword(user.getPassword());
         }
 
+        return this.userRepository.save(userOptional);
+    }
+
+    public Users updatePassword(PasswordChangeRquest changePassword, Long id){
+        Users userOptional = this.userRepository.findById(id).orElseThrow(()->
+                new RuntimeException("User not fount"));
+        if (!this.passwordEncoder.matches(changePassword.getOldPassword(), userOptional.getPassword() )){
+            throw new RuntimeException("The old password is incorrect");
+        }
+
+        if (changePassword.getNewPassword() != null && !changePassword.getNewPassword().isEmpty()){
+
+            if (changePassword.getOldPassword().equals(changePassword.getNewPassword())){
+                throw new RuntimeException("The passwords must be different");
+            }
+            userOptional.setPassword(this.passwordEncoder.encode(changePassword.getNewPassword()));
+        }else {
+            throw new RuntimeException("New password cannot be empty");
+        }
         return this.userRepository.save(userOptional);
     }
 

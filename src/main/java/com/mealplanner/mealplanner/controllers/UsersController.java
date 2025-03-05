@@ -3,6 +3,7 @@ package com.mealplanner.mealplanner.controllers;
 import com.mealplanner.mealplanner.dto.ApiDelivery;
 import com.mealplanner.mealplanner.dto.LoginRequest;
 import com.mealplanner.mealplanner.dto.LoginResponse;
+import com.mealplanner.mealplanner.dto.PasswordChangeRquest;
 import com.mealplanner.mealplanner.models.User_Data;
 import com.mealplanner.mealplanner.models.Users;
 import com.mealplanner.mealplanner.services.UsersService;
@@ -32,6 +33,12 @@ public class UsersController {
     public ResponseEntity<Users> updateUser(@RequestBody Users users, @PathVariable Long id){
         Users updateUser = this.usersService.updateUser(users, id);
         return ResponseEntity.ok(updateUser);
+    }
+
+    @PutMapping("change-password/{id}")
+    public ResponseEntity<Users> changePassword(@RequestBody PasswordChangeRquest passwordChangeRquest, @PathVariable Long id){
+        Users updatedUser = this.usersService.updatePassword(passwordChangeRquest, id);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @GetMapping("/get-users")
