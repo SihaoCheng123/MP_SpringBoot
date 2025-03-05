@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -20,7 +21,7 @@ public class RecipesController {
     private RecipesService recipesService;
 
     @PostMapping("/create/{userId}")
-    public ResponseEntity<Recipes> createRecipe(@RequestBody Recipes recipes, @PathVariable Long userId){
+    public ResponseEntity<Recipes> createRecipe(@RequestBody Recipes recipes, @PathVariable Long userId, @RequestParam(value = "file", required = false) MultipartFile file){
         Date date = recipes.getDate();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -33,7 +34,7 @@ public class RecipesController {
 
         System.out.println(recipes.toString());
         System.out.println(userId);
-        Recipes createRecipe = this.recipesService.createRecipe(recipes, userId);
+        Recipes createRecipe = this.recipesService.createRecipe(recipes, userId, file);
         return ResponseEntity.ok(createRecipe);
     }
 

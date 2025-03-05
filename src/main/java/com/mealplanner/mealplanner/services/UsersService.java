@@ -2,6 +2,7 @@ package com.mealplanner.mealplanner.services;
 
 import com.mealplanner.mealplanner.dto.ApiDelivery;
 import com.mealplanner.mealplanner.dto.LoginResponse;
+import com.mealplanner.mealplanner.dto.PasswordChangeRquest;
 import com.mealplanner.mealplanner.models.User_Data;
 import com.mealplanner.mealplanner.models.Users;
 import com.mealplanner.mealplanner.repositories.UserRepository;
@@ -62,18 +63,52 @@ public class UsersService {
     public Users updateUser(Users user, Long id){
         Users userOptional = this.userRepository.findById(id).orElseThrow(()->
                 new RuntimeException("User not fount"));
+        if (user.getEmail() != null){
+            userOptional.setEmail(user.getEmail());
+        }
+        if (user.getUser_data() != null){
+            User_Data newUserData = userOptional.getUser_data();
 
-        userOptional.setEmail(user.getEmail());
-        User_Data newUserData = new User_Data();
-        newUserData.setName(user.getUser_data().getName());
-        newUserData.setAge(user.getUser_data().getAge());
-        newUserData.setPhone(user.getUser_data().getPhone());
-        userOptional.setUser_data(newUserData);
+            // Si no hay datos del usuario, crear uno nuevo (esto debería ser una validación previa)
+            if (newUserData == null) {
+                newUserData = new User_Data();
+                userOptional.setUser_data(newUserData);
+            }
+            if (user.getUser_data().getPhone() != null){
+                newUserData.setPhone(user.getUser_data().getPhone());
+            }
+            if (user.getUser_data().getName() != null){
+                newUserData.setName(user.getUser_data().getName());
+            }
+            if (user.getUser_data().getAge() != null){
+                newUserData.setAge(user.getUser_data().getAge());
+            }
+            userOptional.setUser_data(newUserData);
+        }
 
-        if (user.getPassword() != null && user.getPassword().isEmpty()){
+        if (user.getPassword() != null && !user.getPassword().isEmpty()){
             userOptional.setPassword(user.getPassword());
         }
 
+        return this.userRepository.save(userOptional);
+    }
+
+    public Users updatePassword(PasswordChangeRquest changePassword, Long id){
+        Users userOptional = this.userRepository.findById(id).orElseThrow(()->
+                new RuntimeException("User not fount"));
+        if (!this.passwordEncoder.matches(changePassword.getOldPassword(), userOptional.getPassword() )){
+            throw new RuntimeException("The old password is incorrect");
+        }
+
+        if (changePassword.getNewPassword() != null && !changePassword.getNewPassword().isEmpty()){
+
+            if (changePassword.getOldPassword().equals(changePassword.getNewPassword())){
+                throw new RuntimeException("The passwords must be different");
+            }
+            userOptional.setPassword(this.passwordEncoder.encode(changePassword.getNewPassword()));
+        }else {
+            throw new RuntimeException("New password cannot be empty");
+        }
         return this.userRepository.save(userOptional);
     }
 
