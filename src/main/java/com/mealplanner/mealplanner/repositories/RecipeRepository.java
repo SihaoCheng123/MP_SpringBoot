@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface RecipeRepository extends JpaRepository<Recipes, Long> {
     Optional<Recipes> findRecipeByName(String name);
     Optional<List<Recipes>> findRecipeByDate(Date date);
+    @Query("SELECT r FROM Recipes r JOIN r.users_recipes u WHERE r.name = :name AND u.id = :userId")
+    Optional<Recipes> findByNameAndUser(@Param("name") String name, @Param("userId") Long userId);
 
     @Query("SELECT r FROM Recipes r JOIN r.users_recipes u WHERE r.date = :date AND u.id = :userId")
     Optional<List<Recipes>> findRecipeByDateAndUserId(@Param("date") Date date, @Param("userId") Long user_id);

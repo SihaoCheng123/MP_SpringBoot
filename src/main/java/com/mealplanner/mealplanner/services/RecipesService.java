@@ -58,7 +58,7 @@ public class RecipesService {
     }
 
     public Recipes createRecipe(Recipes recipes, Long userId, MultipartFile imageFile){
-        if(this.recipeRepository.findRecipeByName(recipes.getName()).isPresent()){
+        if(this.recipeRepository.findByNameAndUser(recipes.getName(), userId).isPresent()){
             throw new RuntimeException("Recipe already exists");
         }
 
