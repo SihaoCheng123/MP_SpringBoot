@@ -235,17 +235,11 @@ public class RecipesService {
         calendar.add(Calendar.DATE, 6);
         Date endOfWeek = calendar.getTime();
 
-        List<Recipes> recipeListWeek = this.recipeRepository.findRecipesBetweenDates(startOfWeek, endOfWeek);
+        List<Recipes> recipeListWeek = this.recipeRepository.findRecipesBetweenDatesAndUserId(startOfWeek, endOfWeek, user_id);
 
         List<Ingredients> ingredientsListWeek = new ArrayList<>();
-        Optional<Users> userOpt = this.userRepository.findById(user_id);
-        if (userOpt.isPresent()){
-            Users existingUser = userOpt.get();
-            for (Recipes recipes: recipeListWeek){
-                if (existingUser.getId().equals(user_id)){
-                    ingredientsListWeek.addAll(recipes.getIngredients());
-                }
-            }
+        for (Recipes recipe : recipeListWeek) {
+            ingredientsListWeek.addAll(recipe.getIngredients());
         }
 
         return ingredientsListWeek;
